@@ -7,9 +7,9 @@ export default function Footer() {
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="bg-sand-100 py-8 mt-auto"
+      className="bg-sand-100 dark:bg-[#0f0d0a] py-8 mt-auto transition-colors duration-500"
     >
-      <p className="text-center text-sm text-sand-600">
+      <p className="text-center text-sm text-sand-600 dark:text-sand-600">
         &copy; {new Date().getFullYear()} Restored &mdash; Un espace de bienveillance
       </p>
     </motion.footer>
