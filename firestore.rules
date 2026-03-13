@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /messages/{messageId} {
+      allow create: if request.resource.data.keys().hasAll(['body', 'createdAt'])
+                    && request.resource.data.body is string
+                    && request.resource.data.body.size() >= 10
+                    && request.resource.data.body.size() <= 5000;
+      allow read, update, delete: if false;
+    }
+  }
+}
