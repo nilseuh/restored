@@ -5,46 +5,77 @@ Un espace sécurisé où n'importe qui peut envoyer anonymement ses challenges d
 ## Stack technique
 
 - **React** via Vite
-- **Tailwind CSS** v3 (palette "Terre & Sable")
-- **Framer Motion** (animations au scroll, transitions de page, effets hover)
+- **Tailwind CSS** v3 (palette "Terre & Sable" + dark mode)
+- **Framer Motion** (animations, transitions, parallaxe, particules)
 - **react-router-dom** v6
 - **Firebase Firestore** (stockage anonyme des messages)
 - **Google Font Lora** (typographie serif)
+
+## Pages
+
+| Page | Route | Description |
+|------|-------|-------------|
+| Accueil | `/` | Hero animé, verset du jour, étapes, témoignages, bio Vanessa, CTA |
+| Espace d'échange | `/contact` | Formulaire anonyme avec humeur, catégorie, historique local |
+| Ressources | `/ressources` | Lignes d'écoute, conseils bien-être, numéros d'urgence |
 
 ## Effets visuels
 
 - Animations au scroll (fade-in / slide-up via Framer Motion)
 - Hero avec gradient mouvant (orbes animées)
+- Particules dorées flottantes dans le hero
+- Parallaxe au scroll (le hero se réduit et s'estompe)
+- Titre "Restored" en animation lettre par lettre (3D reveal)
+- Curseur personnalisé (cercle + point, desktop uniquement)
 - Bandeau défilant (marquee) avec mots-clés
 - Navbar glassmorphism (backdrop-blur au scroll)
 - Transitions de page fluides (AnimatePresence)
-- Effets hover premium (scale, ombre, remplissage)
+- Effets hover premium (scale, ombre, remplissage, bordure lumineuse)
 - Compteurs animés (100% Anonyme, 0 Données, 24/7)
+- Carousel de témoignages auto-défilant
 - Spinner d'envoi animé
-- Scrollbar et sélection personnalisées
+- Mode sombre avec toggle (lune/soleil)
+- Scrollbar et sélection personnalisées (light + dark)
+
+## Fonctionnalités
+
+- **Anonymat total** : aucun identifiant collecté, Firestore write-only
+- **Sélecteur d'humeur** : 6 emojis animés (Triste, Anxieux·se, En colère, Perdu·e, Fatigué·e, Neutre)
+- **Catégories** : Famille, Travail, Amour, Santé, Autre
+- **Historique local** : messages envoyés stockés en localStorage avec humeur/catégorie
+- **Anti-spam** : champ honeypot invisible
+- **Verset du jour** : 12 versets bibliques inspirants, rotation quotidienne
+- **Mode sombre** : toggle manuel + détection des préférences système
+- **Responsive** : mobile-first, hamburger menu, design adaptatif
 
 ## Arborescence
 
 ```
 restored/
-├── index.html                  # Point d'entrée HTML + Google Font
+├── index.html                  # Point d'entrée HTML + Google Font Lora
 ├── vite.config.js              # Configuration Vite
-├── tailwind.config.js          # Palette sand + font Lora
+├── tailwind.config.js          # Palette sand + font Lora + darkMode: 'class'
 ├── postcss.config.js           # PostCSS + Tailwind
-├── firestore.rules             # Règles de sécurité Firestore
-├── .env.example                # Template des variables d'environnement
+├── firestore.rules             # Règles de sécurité Firestore (write-only)
+├── .env.example                # Template des variables d'environnement Firebase
 ├── package.json
 ├── src/
 │   ├── main.jsx                # Point d'entrée React
-│   ├── index.css               # Directives Tailwind + scrollbar + sélection
-│   ├── App.jsx                 # Routes + transitions de page (AnimatePresence)
+│   ├── index.css               # Directives Tailwind + scrollbar + sélection (light/dark)
+│   ├── App.jsx                 # Routes + AnimatePresence + ThemeContext + CustomCursor
 │   ├── firebase.js             # Config Firebase Firestore (env vars)
+│   ├── hooks/
+│   │   └── useDarkMode.js      # Hook dark mode (localStorage + préférence système)
 │   ├── components/
-│   │   ├── Navbar.jsx          # Navigation glassmorphism + hamburger animé
-│   │   └── Footer.jsx          # Pied de page avec fade-in
+│   │   ├── Navbar.jsx          # Navigation glassmorphism + toggle dark mode + hamburger
+│   │   ├── Footer.jsx          # Pied de page avec fade-in (light/dark)
+│   │   ├── CustomCursor.jsx    # Curseur personnalisé (desktop uniquement)
+│   │   └── Particles.jsx       # Particules dorées flottantes (Framer Motion)
 │   └── pages/
-│       ├── Home.jsx            # Hero animé + marquee + étapes + bio + CTA
-│       └── Contact.jsx         # Formulaire animé + historique localStorage
+│       ├── Home.jsx            # Hero (parallaxe + particules + text-reveal) + verset
+│       │                       #   + marquee + étapes + témoignages + bio + CTA
+│       ├── Contact.jsx         # Formulaire (humeur + catégorie + honeypot) + historique
+│       └── Resources.jsx       # Lignes d'écoute + conseils bien-être
 └── docs/
     └── superpowers/
         ├── specs/              # Spécification du projet
@@ -88,13 +119,14 @@ npm install -D tailwindcss@3 postcss autoprefixer
 Si la génération est interrompue, voici l'ordre de construction :
 
 1. **Scaffolding** : `npm create vite@latest restored -- --template react` + dépendances
-2. **Tailwind** : `tailwind.config.js` avec palette sand + `index.css` avec directives + scrollbar
-3. **Firebase** : `src/firebase.js` avec config via env vars + `firestore.rules`
-4. **Navbar** : `src/components/Navbar.jsx` (glassmorphism + hamburger animé)
-5. **Footer** : `src/components/Footer.jsx` (fade-in)
-6. **App router** : `src/App.jsx` avec BrowserRouter + AnimatePresence (transitions de page)
-7. **Home** : `src/pages/Home.jsx` (hero gradient + marquee + étapes animées + bio + CTA)
-8. **Contact** : `src/pages/Contact.jsx` (form animé + honeypot + historique localStorage)
-9. **README** : Ce fichier
+2. **Tailwind** : `tailwind.config.js` avec palette sand, darkMode: 'class' + `index.css`
+3. **Firebase** : `src/firebase.js` via env vars + `firestore.rules`
+4. **Hooks** : `src/hooks/useDarkMode.js`
+5. **Composants** : `CustomCursor.jsx`, `Particles.jsx`, `Navbar.jsx`, `Footer.jsx`
+6. **App** : `src/App.jsx` avec ThemeContext + AnimatePresence + CustomCursor
+7. **Home** : `src/pages/Home.jsx` (hero complet + verset + marquee + étapes + témoignages + bio + CTA)
+8. **Contact** : `src/pages/Contact.jsx` (humeur + catégorie + form + historique)
+9. **Ressources** : `src/pages/Resources.jsx` (lignes d'écoute + conseils)
+10. **README** : Ce fichier
 
 Chaque étape produit un commit indépendant.
