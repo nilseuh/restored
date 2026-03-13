@@ -6,9 +6,22 @@ Un espace sécurisé où n'importe qui peut envoyer anonymement ses challenges d
 
 - **React** via Vite
 - **Tailwind CSS** v3 (palette "Terre & Sable")
+- **Framer Motion** (animations au scroll, transitions de page, effets hover)
 - **react-router-dom** v6
 - **Firebase Firestore** (stockage anonyme des messages)
 - **Google Font Lora** (typographie serif)
+
+## Effets visuels
+
+- Animations au scroll (fade-in / slide-up via Framer Motion)
+- Hero avec gradient mouvant (orbes animées)
+- Bandeau défilant (marquee) avec mots-clés
+- Navbar glassmorphism (backdrop-blur au scroll)
+- Transitions de page fluides (AnimatePresence)
+- Effets hover premium (scale, ombre, remplissage)
+- Compteurs animés (100% Anonyme, 0 Données, 24/7)
+- Spinner d'envoi animé
+- Scrollbar et sélection personnalisées
 
 ## Arborescence
 
@@ -23,18 +36,19 @@ restored/
 ├── package.json
 ├── src/
 │   ├── main.jsx                # Point d'entrée React
-│   ├── index.css               # Directives Tailwind
-│   ├── App.jsx                 # Routes (Home + Contact)
-│   ├── firebase.js             # Config Firebase Firestore
+│   ├── index.css               # Directives Tailwind + scrollbar + sélection
+│   ├── App.jsx                 # Routes + transitions de page (AnimatePresence)
+│   ├── firebase.js             # Config Firebase Firestore (env vars)
 │   ├── components/
-│   │   ├── Navbar.jsx          # Navigation responsive
-│   │   └── Footer.jsx          # Pied de page
+│   │   ├── Navbar.jsx          # Navigation glassmorphism + hamburger animé
+│   │   └── Footer.jsx          # Pied de page avec fade-in
 │   └── pages/
-│       ├── Home.jsx            # Accueil (hero + étapes + bio)
-│       └── Contact.jsx         # Formulaire anonyme + historique
+│       ├── Home.jsx            # Hero animé + marquee + étapes + bio + CTA
+│       └── Contact.jsx         # Formulaire animé + historique localStorage
 └── docs/
     └── superpowers/
-        └── specs/              # Spécification du projet
+        ├── specs/              # Spécification du projet
+        └── plans/              # Plan d'implémentation
 ```
 
 ## Installation
@@ -65,7 +79,7 @@ npm run dev
 ## Dépendances
 
 ```bash
-npm install react react-dom react-router-dom firebase
+npm install react react-dom react-router-dom firebase framer-motion
 npm install -D tailwindcss@3 postcss autoprefixer
 ```
 
@@ -74,13 +88,13 @@ npm install -D tailwindcss@3 postcss autoprefixer
 Si la génération est interrompue, voici l'ordre de construction :
 
 1. **Scaffolding** : `npm create vite@latest restored -- --template react` + dépendances
-2. **Tailwind** : `tailwind.config.js` avec palette sand + `index.css` avec directives
+2. **Tailwind** : `tailwind.config.js` avec palette sand + `index.css` avec directives + scrollbar
 3. **Firebase** : `src/firebase.js` avec config via env vars + `firestore.rules`
-4. **Navbar** : `src/components/Navbar.jsx` (responsive + hamburger)
-5. **Footer** : `src/components/Footer.jsx`
-6. **App router** : `src/App.jsx` avec BrowserRouter + layout
-7. **Home** : `src/pages/Home.jsx` (hero → étapes → bio)
-8. **Contact** : `src/pages/Contact.jsx` (form + honeypot + historique localStorage)
+4. **Navbar** : `src/components/Navbar.jsx` (glassmorphism + hamburger animé)
+5. **Footer** : `src/components/Footer.jsx` (fade-in)
+6. **App router** : `src/App.jsx` avec BrowserRouter + AnimatePresence (transitions de page)
+7. **Home** : `src/pages/Home.jsx` (hero gradient + marquee + étapes animées + bio + CTA)
+8. **Contact** : `src/pages/Contact.jsx` (form animé + honeypot + historique localStorage)
 9. **README** : Ce fichier
 
 Chaque étape produit un commit indépendant.
