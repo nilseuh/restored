@@ -1,9 +1,24 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import Contact from './pages/Contact';
+
 function App() {
   return (
-    <div className="min-h-screen bg-sand-50 flex items-center justify-center">
-      <h1 className="font-serif text-4xl text-sand-900">Restored</h1>
-    </div>
-  )
+    <BrowserRouter>
+      <div className="min-h-screen bg-sand-50 flex flex-col">
+        <Navbar />
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
