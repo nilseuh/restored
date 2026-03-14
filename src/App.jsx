@@ -6,6 +6,8 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Contact from './pages/Contact';
 import Resources from './pages/Resources';
+import AdminLogin from './pages/AdminLogin';
+import AdminInbox from './pages/AdminInbox';
 import CustomCursor from './components/CustomCursor';
 import useDarkMode from './hooks/useDarkMode';
 
@@ -32,20 +34,38 @@ function AnimatedRoutes() {
   );
 }
 
+function AppLayout() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
+  if (isAdmin) {
+    return (
+      <Routes location={location}>
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-inbox" element={<AdminInbox />} />
+      </Routes>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-sand-50 dark:bg-[#1a1612] flex flex-col transition-colors duration-500">
+      <CustomCursor />
+      <Navbar />
+      <main className="flex-1">
+        <AnimatedRoutes />
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
 function App() {
   const [dark, setDark] = useDarkMode();
 
   return (
     <ThemeContext.Provider value={{ dark, setDark }}>
       <BrowserRouter>
-        <div className="min-h-screen bg-sand-50 dark:bg-[#1a1612] flex flex-col transition-colors duration-500">
-          <CustomCursor />
-          <Navbar />
-          <main className="flex-1">
-            <AnimatedRoutes />
-          </main>
-          <Footer />
-        </div>
+        <AppLayout />
       </BrowserRouter>
     </ThemeContext.Provider>
   );

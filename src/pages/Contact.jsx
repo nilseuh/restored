@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { motion, useInView } from 'framer-motion';
+import ChatSystem from '../components/ChatSystem';
 
 const SUBJECT_MAX = 100;
 const BODY_MIN = 10;
@@ -366,6 +367,19 @@ export default function Contact() {
               ))}
             </div>
           )}
+        </section>
+      </Reveal>
+
+      {/* Live Chat with Vanessa */}
+      <Reveal delay={0.4}>
+        <section className="mt-16">
+          <h2 className="font-serif text-xl font-bold text-sand-900 dark:text-sand-50 text-center mb-2">
+            Discuter en direct avec Vanessa
+          </h2>
+          <p className="text-sand-600 dark:text-sand-300 text-center text-sm mb-8">
+            Vous pouvez également échanger en temps réel via la messagerie ci-dessous.
+          </p>
+          <ChatSystem />
         </section>
       </Reveal>
     </div>
