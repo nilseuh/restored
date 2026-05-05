@@ -18,7 +18,7 @@ export default function Navbar() {
   const links = [
     { to: '/', label: 'Accueil' },
     { to: '/contact', label: 'Espace d\'échange' },
-    { to: '/ressources', label: 'Ressources' },
+    { to: '/ressources', label: 'Accompagnement & Ressources' },
   ];
 
   return (
