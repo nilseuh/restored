@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Talk from 'talkjs';
 import { Session, Inbox } from '@talkjs/react';
@@ -8,11 +8,32 @@ const ADMIN_ID = 'admin-vanessa';
 
 export default function AdminInbox() {
   const navigate = useNavigate();
+  const [verified, setVerified] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem('restored_admin') !== 'true') {
+    const token = localStorage.getItem('restored_admin_token');
+    if (!token) {
       navigate('/admin-login');
+      return;
     }
+    fetch('/api/admin-verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    })
+      .then((r) => r.json().catch(() => ({ valid: false })))
+      .then((data) => {
+        if (data.valid) {
+          setVerified(true);
+        } else {
+          localStorage.removeItem('restored_admin_token');
+          navigate('/admin-login');
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem('restored_admin_token');
+        navigate('/admin-login');
+      });
   }, [navigate]);
 
   const syncUser = useCallback(
@@ -28,8 +49,16 @@ export default function AdminInbox() {
   );
 
   function handleLogout() {
-    localStorage.removeItem('restored_admin');
+    localStorage.removeItem('restored_admin_token');
     navigate('/admin-login');
+  }
+
+  if (!verified) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-sand-50 dark:bg-[#1a1612]">
+        <p className="text-sand-600 dark:text-sand-300">Vérification…</p>
+      </div>
+    );
   }
 
   return (

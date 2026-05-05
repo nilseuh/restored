@@ -1,20 +1,33 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ADMIN_PASSWORD = 'Restored2026';
-
 export default function AdminLogin() {
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
-      localStorage.setItem('restored_admin', 'true');
+    setError('');
+    setLoading(true);
+    try {
+      const res = await fetch('/api/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data.error || 'Connexion impossible');
+        return;
+      }
+      localStorage.setItem('restored_admin_token', data.token);
       navigate('/admin-inbox');
-    } else {
-      setError(true);
+    } catch {
+      setError('Erreur réseau, réessayez');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -40,24 +53,26 @@ export default function AdminLogin() {
           value={password}
           onChange={(e) => {
             setPassword(e.target.value);
-            setError(false);
+            setError('');
           }}
-          className="w-full px-4 py-3 rounded-lg bg-sand-50 dark:bg-[#1a1612] border border-sand-300/50 dark:border-sand-600/30 text-sand-900 dark:text-sand-100 placeholder-sand-300 focus:outline-none focus:ring-2 focus:ring-sand-600/40"
+          disabled={loading}
+          className="w-full px-4 py-3 rounded-lg bg-sand-50 dark:bg-[#1a1612] border border-sand-300/50 dark:border-sand-600/30 text-sand-900 dark:text-sand-100 placeholder-sand-300 focus:outline-none focus:ring-2 focus:ring-sand-600/40 disabled:opacity-50"
           placeholder="Entrez le mot de passe"
           autoFocus
         />
 
         {error && (
           <p className="mt-2 text-sm text-red-500">
-            Mot de passe incorrect.
+            {error}
           </p>
         )}
 
         <button
           type="submit"
-          className="mt-6 w-full py-3 rounded-lg bg-sand-900 dark:bg-sand-600 text-white font-medium hover:opacity-90 transition-opacity"
+          disabled={loading || password.length === 0}
+          className="mt-6 w-full py-3 rounded-lg bg-sand-900 dark:bg-sand-600 text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Connexion
+          {loading ? 'Connexion…' : 'Connexion'}
         </button>
       </form>
     </div>
